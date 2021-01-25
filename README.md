@@ -21,4 +21,6 @@ $ yarn generate
 
 ## References
 
-- [web.dev: Read and write from a serial port](https://web.dev/serial/)
+- [Getting started with the Web Serial API (for how to enable the Web Serial API)](https://codelabs.developers.google.com/codelabs/web-serial#2)
+- [web.dev: Read and write from a serial port (for a step-by-step guide)](https://web.dev/serial/)
+- [Web Serial API Living document (for the draft of the specification)](https://reillyeon.github.io/serial/)

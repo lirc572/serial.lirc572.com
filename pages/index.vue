@@ -50,6 +50,7 @@
               v-model="inputText"
               label="Send Text"
               clearable
+              @keyup="inputTextKeyUp"
             />
             <v-btn
               elevation="2"
@@ -156,6 +157,11 @@ export default {
       })
       this.inputText = ''
       writer.releaseLock()
+    },
+    inputTextKeyUp (event) {
+      if (event.keyCode === 13) {
+        this.writeToOutputStream()
+      }
     },
     async readLoop () {
       while (true) {

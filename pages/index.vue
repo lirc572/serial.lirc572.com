@@ -17,6 +17,7 @@
           <v-btn
             elevation="2"
             color="primary"
+            :disabled="!serialSupported"
             @click="selectPort"
           >
             Select Port

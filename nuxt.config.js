@@ -11,7 +11,8 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' }
+      { hid: 'description', name: 'description', content: '' },
+      { 'http-equiv': 'origin-trial', content: 'As4TVp0jxbmHYirDb/vFBHmKgJinRIOyPzwveGMP+1Jx57HZ87fluscuPysZXf2OLdGazKE9T0fzX+IA3DRSEA0AAABSeyJvcmlnaW4iOiJodHRwczovL3NlcmlhbC5saXJjNTcyLmNvbTo0NDMiLCJmZWF0dXJlIjoiU2VyaWFsIiwiZXhwaXJ5IjoxNjE1MTgwNzkwfQ==' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }

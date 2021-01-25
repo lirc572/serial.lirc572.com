@@ -1,6 +1,14 @@
 <template>
   <v-row justify="center" align="center">
     <v-col cols="12" sm="8" md="6">
+      <v-alert
+        v-show="!serialSupported"
+        border="left"
+        type="error"
+        elevation="2"
+      >
+        Web Serial API is not supported on your browser! Please use the latest version of Chrome!
+      </v-alert>
       <div class="text-center">
         <logo />
         <vuetify-logo />
@@ -84,6 +92,11 @@ export default {
   components: {
     Logo,
     VuetifyLogo
+  },
+  asyncData () {
+    return {
+      serialSupported: process.browser ? ('serial' in navigator) : true
+    }
   }
 }
 </script>

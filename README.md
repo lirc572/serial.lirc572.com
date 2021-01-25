@@ -19,4 +19,6 @@ $ yarn start
 $ yarn generate
 ```
 
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+## References
+
+- [web.dev: Read and write from a serial port](https://web.dev/serial/)

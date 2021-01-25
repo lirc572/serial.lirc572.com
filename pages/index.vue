@@ -29,9 +29,9 @@
             elevation="2"
             color="success"
             :disabled="!port"
-            @click="openPort"
+            @click="connect"
           >
-            Connect
+            {{ inputStream ? 'Disconnect' : 'Connect' }}
           </v-btn>
           <hr class="my-3">
           <v-textarea
@@ -77,20 +77,26 @@ export default {
     Logo,
     VuetifyLogo
   },
-  asyncData () {
-    return {
-      serialSupported: process.browser ? ('serial' in navigator) : true
-    }
-  },
   data () {
     return {
       port: null,
+      readableStreamClosed: null,
+      writableStreamClosed: null,
       inputStream: null,
-      reader: null,
       outputStream: null,
+      reader: null,
       consoleText: '',
-      inputText: ''
+      inputText: '',
+      serialSupported: null
     }
+  },
+  created () {
+    let serialSupported = 'ha'
+    if (process.client) {
+      // running on client
+      serialSupported = 'serial' in navigator
+    }
+    this.serialSupported = serialSupported
   },
   methods: {
     updateConsoleText (text) {
@@ -102,6 +108,29 @@ export default {
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log(error)
+      }
+    },
+    async connect () {
+      if (!this.inputStream) {
+        await this.openPort()
+      } else {
+        if (this.reader) {
+          this.reader.cancel()
+          await this.readableStreamClosed.catch(() => { /* Ignore the error */ })
+          this.reader = null
+          this.inputStream = null
+          this.readableStreamClosed = null
+        }
+        if (this.outputStream) {
+          await this.outputStream.getWriter().close()
+          await this.writableStreamClosed
+          this.outputStream = null
+          this.writableStreamClosed = null
+        }
+        await this.port.close()
+        this.port = null
+        this.consoleText = ''
+        this.inputText = ''
       }
     },
     async openPort () {
@@ -118,22 +147,20 @@ export default {
     createInputStream () {
       // eslint-disable-next-line no-undef
       const decoder = new TextDecoderStream()
-      this.port.readable.pipeTo(decoder.writable)
+      this.readableStreamClosed = this.port.readable.pipeTo(decoder.writable)
       this.inputStream = decoder.readable
       this.reader = this.inputStream.getReader()
     },
     createOutputStream () {
       // eslint-disable-next-line no-undef
       const encoder = new TextEncoderStream()
-      encoder.readable.pipeTo(this.port.writable)
+      this.writableStreamClosed = encoder.readable.pipeTo(this.port.writable)
       this.outputStream = encoder.writable
     },
     writeToOutputStream () {
-      const lines = this.inputText.split('\n')
       const writer = this.outputStream.getWriter()
+      const lines = this.inputText.split('\n')
       lines.forEach((line) => {
-        // eslint-disable-next-line no-console
-        console.log('[SEND]', line)
         writer.write(line + '\n')
         this.updateConsoleText(line + '\n')
       })
@@ -144,8 +171,6 @@ export default {
       while (true) {
         const { value, done } = await this.reader.read()
         if (value) {
-          // eslint-disable-next-line no-console
-          console.log(value)
           this.updateConsoleText(value)
           this.consoleScrollToBottom()
         }
@@ -159,8 +184,6 @@ export default {
     },
     consoleScrollToBottom () {
       const consoleElement = document.getElementById('console-textarea')
-      // eslint-disable-next-line no-console
-      console.log('Scrolling to', consoleElement.scrollHeight)
       consoleElement.scrollTop = consoleElement.scrollHeight
     }
   }

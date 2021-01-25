@@ -9,10 +9,6 @@
       >
         Web Serial API is not supported on your browser! Please use the latest version of Chrome!
       </v-alert>
-      <div class="text-center">
-        <logo />
-        <vuetify-logo />
-      </div>
       <v-card>
         <v-card-title class="headline">
           Serial Monitor

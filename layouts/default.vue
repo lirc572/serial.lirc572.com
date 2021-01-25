@@ -98,7 +98,7 @@ export default {
       items: [
         {
           icon: 'mdi-apps',
-          title: 'Welcome',
+          title: 'Monitor',
           to: '/'
         },
         {
@@ -110,7 +110,7 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Vuetify.js'
+      title: 'Serial Monitor'
     }
   }
 }
